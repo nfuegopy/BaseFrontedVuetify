@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginVentana from '../views/LoginVentana.vue';
 import MainMenu from '../views/MainMenu.vue';
+import ResetPassword from '../views/ResetPassword.vue';
+import InicioMenu from '../pages/InicioMenu.vue'
 
 const routes = [
 
@@ -12,9 +14,21 @@ const routes = [
   {
     path: '/menu',
     name: 'Menu',
-    component: MainMenu
+    component: MainMenu,
+    children:[
+      {
+        path: '/inicio',
+        name: 'Inicio',
+        component: InicioMenu
+      }
+      
+    ]
   },
-
+{
+  path: '/reset/:usuarioId',
+  name: 'Reset',
+  component: ResetPassword
+}
  
 ]
 

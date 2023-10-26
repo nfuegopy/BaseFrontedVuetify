@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="blue darken-3" dark>
+    <v-app-bar app color="blue darken-3" dark >
       <v-toolbar-title>Mi Aplicación</v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -55,23 +55,30 @@
       <router-view></router-view>
     </v-main>
 
-    <v-footer app>
-      <!-- Contenido del footer (Opcional) -->
-    </v-footer>
+
   </v-app>
 </template>
 
 <script>
+import { useRouter } from 'vue-router';
+
 export default {
-  methods: {
-    navigateTo(routeName) {
-      this.$router.push({ name: routeName });
-    },
-    logout() {
-      // Lógica para cerrar sesión
+  setup() {
+    const router = useRouter();
+
+    const navigateTo = (routeName) => {
+      router.push({ name: routeName });
+    };
+
+    const logout = () => {
+      router.push({ name: "Inicio" });
       console.log('Cerrar sesión');
-    }
-  }
+    };
+
+    return {
+      navigateTo,
+      logout
+    };
+  },
 };
 </script>
-
