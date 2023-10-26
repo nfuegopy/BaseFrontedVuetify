@@ -1,91 +1,76 @@
 <template>
-  <div class="container">
-      <v-sheet class="neumorphic-bg">
-          <v-card class="neumorphic-card mx-auto pa-12" max-width="380">
-              <v-form
-                  v-model="form"
-                  @submit.prevent="onSubmit"
-              >
-                  <div class="text-center mb-5">
-                      <h2>Acceso al Sistema</h2>
-                      <p>Ingrese sus credenciales para continuar</p>
-                  </div>
-          
-                  <v-text-field
-                      v-model="email"
-                      :readonly="loading"
-                      :rules="[required]"
-                      clearable
-                      label="Usuario"
-                      solo
-                      placeholder="Nombre de usuario"
-                      class="neumorphic-input mb-4"
-                  ></v-text-field>
-          
-                  <v-text-field
-                      v-model="password"
-                      :readonly="loading"
-                      :rules="[required]"
-                      clearable
-                      label="Contraseña"
-                      solo
-                      type="password"
-                      placeholder="Introduzca su contraseña"
-                      class="neumorphic-input mb-4"
-                  ></v-text-field>
-          
-                  <v-btn
-                      :disabled="!form"
-                      :loading="loading"
-                      block
-                      color="deep-purple accent-4"
-                      size="large"
-                      type="submit"
-                      class="my-4"
-                      elevation="0"
-                      style="border-radius: 12px;"
-                  >
-                      Entrar
-                  </v-btn>
+    <v-container>
+      <v-row justify="center" align="center" style="height: 100vh">
+        <v-col cols="12" sm="8" md="4">
+          <v-card style="border: 2px solid rgb(96, 96, 255); box-shadow: 0 16px 16px rgba(0,0,0,0.2);">
+            <v-card-title class="text-center">
+              Iniciar Sesión
+            </v-card-title>
+            <v-card-text>
+              <v-form>
+                <v-text-field
+                v-model="username"
+                  placeholder="Nombre de usuario"
+                  required
+                  variant="outlined"
+            
+                ></v-text-field>
+                <v-text-field
+                v-model="password"
+                placeholder="Contraseña"
+                  type="password"
+                  variant="outlined"
+                  required
+                  
+                ></v-text-field>
               </v-form>
+            </v-card-text>
+            <v-card-actions class="justify-center">
+              <v-btn class="bg-blue" color="white" @click="ingresar">
+                Ingresar
+              </v-btn>
+            </v-card-actions>
           </v-card>
-      </v-sheet>
-  </div>
-</template>
-
-
-
-
-<style scoped>
-.container {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #e0e5ec;
-}
-
-.neumorphic-bg {
-  background: #e0e5ec;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 15px;
-  box-shadow: -8px -8px 16px #bfc6d1, 
-              8px 8px 16px #ffffff;
-}
-
-.neumorphic-card {
-  background: #e0e5ec;
-  border-radius: 15px;
-  box-shadow: -8px -8px 16px #bfc6d1, 
-              8px 8px 16px #ffffff;
-}
-
-.neumorphic-input {
-  background: #e0e5ec;
-  border-radius: 12px;
-  box-shadow: inset -4px -4px 8px #bfc6d1, 
-              inset 4px 4px 8px #ffffff;
-}
-</style>
+        </v-col>
+      </v-row>
+    </v-container>
+  </template>
+  
+  <script>
+  import { ref } from "vue";
+  import { useRouter } from "vue-router";
+  import AuthService from "@/services/AuthService";
+  
+  export default {
+    setup() {
+      const router = useRouter();
+      const username = ref("");
+      const password = ref("");
+  
+      const ingresar = async () => {
+        try {
+          const response = await AuthService.login(username.value, password.value);
+          if (response.redirect === "menu") {
+            // Almacenar UsuarioID en localStorage
+            localStorage.setItem('UsuarioID', response.UsuarioID);
+            router.push({ name: "Inicio" });
+          } else if (response.redirect === "reset") {
+            // Almacenar UsuarioID en localStorage
+            localStorage.setItem('UsuarioID', response.UsuarioID);
+            console.log(response); 
+            router.push({ name: "Reset", params: { usuarioId: response.UsuarioID } });  // Modificación aquí
+          }
+        } catch (error) {
+          console.error('Error en el ingreso:', error);
+        }
+      };
+  
+      return {
+        username,
+        password,
+        ingresar,
+      };
+    },
+  };
+  </script>
+  
