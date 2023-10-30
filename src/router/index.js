@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginVentana from '../views/LoginVentana.vue';
 import MainMenu from '../views/MainMenu.vue';
 import ResetPassword from '../views/ResetPassword.vue';
-import InicioMenu from '../pages/InicioMenu.vue'
+import InicioMenu from '../pages/InicioMenu.vue';
+import PersonalVista from '../pages/Personal/View/PersonalVista.vue'
 
 const routes = [
 
@@ -20,6 +21,11 @@ const routes = [
         path: '/inicio',
         name: 'Inicio',
         component: InicioMenu
+      },
+      {
+        path: '/personales',
+        name: 'Personal',
+        component: PersonalVista
       }
       
     ]
